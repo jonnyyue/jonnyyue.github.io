@@ -2,7 +2,7 @@
     <div class="container row center-align">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
-            <span id="year">年份</span>
+            <span id="year">2019</span>
             <a href="<%- config.url %>" target="_blank"><%- config.author %></a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
@@ -14,7 +14,6 @@
             <% let socialClass = '' %>
             <% if (theme.busuanziStatistics && theme.busuanziStatistics.enable) { %>
             <% socialClass = 'social-statis' %>
-            <% } %>
             <% if (theme.busuanziStatistics && theme.busuanziStatistics.totalTraffic) { %>
             <span id="busuanzi_container_site_pv">
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
@@ -28,6 +27,8 @@
             </span>
             <% } %>
             <br>
+            <% } %>
+            <% if (theme.time.enable) { %>
             <span id="sitetime">载入运行时间...</span>
             <script>
                 function siteTime() {
@@ -73,6 +74,7 @@
                 setInterval(siteTime, 1000);
             </script>
             <br>
+            <% } %>
             <% if (theme.icp.enable) { %>
             <span id="icp"><img src="/medias/icp.png" style="vertical-align: text-bottom;" />
                 <a href="<%- theme.icp.url %>" target="_blank"><%- theme.icp.text %></a>
