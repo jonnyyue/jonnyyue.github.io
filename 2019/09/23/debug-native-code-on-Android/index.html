@@ -1,0 +1,1010 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Android Studio中调试native代码, 孑鸢">
+    <meta name="description" content="1. 背景1.1 技术背景随着减少多端开发成本，规避多端差异，业务采用跨端的C++开发，本文主要介绍在Android调试native代码的技巧，抛砖引玉。
+2. 调试机型2.1 有root权限的手机2.1.1 命令行中敲如上命令，将本地编译">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Android Studio中调试native代码 | 孑鸢</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">孑鸢</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">孑鸢</div>
+        <div class="logo-desc">
+            
+            ikoumi的技术博客
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+<li class="m-nav-item">
+			
+				<a href="/" class="waves-effect waves-light">
+					
+					<i class="fa-fw fas fa-home"></i>
+					
+					首页
+				</a>
+          
+        </li>
+        
+<li class="m-nav-item">
+			
+				<a href="/tags" class="waves-effect waves-light">
+					
+					<i class="fa-fw fas fa-tags"></i>
+					
+					标签
+				</a>
+          
+        </li>
+        
+<li class="m-nav-item">
+			
+				<a href="/categories" class="waves-effect waves-light">
+					
+					<i class="fa-fw fas fa-bookmark"></i>
+					
+					分类
+				</a>
+          
+        </li>
+        
+<li class="m-nav-item">
+			
+				<a href="/archives" class="waves-effect waves-light">
+					
+					<i class="fa-fw fas fa-archive"></i>
+					
+					归档
+				</a>
+          
+        </li>
+        
+<li class="m-nav-item">
+			
+				<a href="/about" class="waves-effect waves-light">
+					
+					<i class="fa-fw fas fa-user-circle"></i>
+					
+					关于
+				</a>
+          
+        </li>
+        
+<li class="m-nav-item">
+			
+				<a href="/contact" class="waves-effect waves-light">
+					
+					<i class="fa-fw fas fa-comments"></i>
+					
+					Contact
+				</a>
+          
+        </li>
+        
+<li class="m-nav-item">
+			
+				<a href="/friends" class="waves-effect waves-light">
+					
+					<i class="fa-fw fas fa-address-book"></i>
+					
+					友情链接
+				</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Android Studio中调试native代码
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Debug/">
+                                <span class="chip bg-color">Debug</span>
+                            </a>
+                        
+                            <a href="/tags/Android/">
+                                <span class="chip bg-color">Android</span>
+                            </a>
+                        
+                            <a href="/tags/Native/">
+                                <span class="chip bg-color">Native</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-09-23
+                </div>
+
+                
+				
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h3><h4 id="1-1-技术背景"><a href="#1-1-技术背景" class="headerlink" title="1.1 技术背景"></a>1.1 技术背景</h4><p>随着减少多端开发成本，规避多端差异，业务采用跨端的C++开发，本文主要介绍在Android调试native代码的技巧，抛砖引玉。</p>
+<h3 id="2-调试机型"><a href="#2-调试机型" class="headerlink" title="2. 调试机型"></a>2. 调试机型</h3><h4 id="2-1-有root权限的手机"><a href="#2-1-有root权限的手机" class="headerlink" title="2.1 有root权限的手机"></a>2.1 有root权限的手机</h4><h6 id="2-1-1-命令行中敲如上命令，将本地编译好的so文件push到手淘的安装路径下"><a href="#2-1-1-命令行中敲如上命令，将本地编译好的so文件push到手淘的安装路径下" class="headerlink" title="2.1.1 命令行中敲如上命令，将本地编译好的so文件push到手淘的安装路径下"></a>2.1.1 命令行中敲如上命令，将本地编译好的so文件push到手淘的安装路径下</h6><pre class=" language-shell"><code class="language-shell">adb push libmesssagesdkwrapper.so /sdcard/tmp/
+adb shell
+// inside adb shell
+su
+cp /sdcard/tmp/libmessagesdkwrapper.so /data/app/com.taobao.taobao-2/lib/arm/</code></pre>
+<p>可以使用附件中的devtool.py脚本简化操作：</p>
+<pre class=" language-shell"><code class="language-shell">devtool.py pushlib libmessagesdkwrapper.so com.taobao.taobao</code></pre>
+<p>脚本会过滤出子目录下所有的aar文件，筛选出合适的文件解压并上传so文件到app的安装目录。<br>(脚本通过找到libC++_shared.lib来获得lib目录，如果有更通用的方案欢迎拍砖)</p>
+<h6 id="2-1-2-然后操作Android-Studio，Run-gt-Attach-Debugger-to-Android-Process。"><a href="#2-1-2-然后操作Android-Studio，Run-gt-Attach-Debugger-to-Android-Process。" class="headerlink" title="2.1.2 然后操作Android Studio，Run->Attach Debugger to Android Process。"></a>2.1.2 然后操作Android Studio，Run-&gt;Attach Debugger to Android Process。</h6><h6 id="2-1-3-选择Native调试器，选中手淘的进程，点击OK等待附加完成。"><a href="#2-1-3-选择Native调试器，选中手淘的进程，点击OK等待附加完成。" class="headerlink" title="2.1.3 选择Native调试器，选中手淘的进程，点击OK等待附加完成。"></a>2.1.3 选择Native调试器，选中手淘的进程，点击OK等待附加完成。</h6><h4 id="2-2-没有root权限的手机"><a href="#2-2-没有root权限的手机" class="headerlink" title="2.2 没有root权限的手机"></a>2.2 没有root权限的手机</h4><p>主要原理就是将现有的apk解压，然后替换里面的so文件，重新打包签名。</p>
+<h6 id="2-2-1-工具下载"><a href="#2-2-1-工具下载" class="headerlink" title="2.2.1 工具下载"></a>2.2.1 工具下载</h6><p>Java环境: 如果本地没有安装Java环境，又不想安装Java环境，可以直接使用Android Studio内部集成的jre环境，配置环境变量JAVA_HOME=C:\Program Files\Android\Android Studio\jre，在PATH中增加%JAVA_HOME%/bin<br>ApkTool助手：(其实可以用ApkTool命令行直接操作的，这里偷懒使用别人已经封装好的UI程序)<br>下载链接: <a href="https://pan.baidu.com/s/17Id9xxn0NdFdTOhfrM_T8A" target="_blank" rel="noopener">https://pan.baidu.com/s/17Id9xxn0NdFdTOhfrM_T8A</a> 密码:d590</p>
+<h6 id="2-2-2-更改ApkTool助手配置"><a href="#2-2-2-更改ApkTool助手配置" class="headerlink" title="2.2.2 更改ApkTool助手配置:"></a>2.2.2 更改ApkTool助手配置:</h6><p>由于手淘中集成了安全保镖组件，保镖会校验当前apk的签名，如果不合法就不能进行加签等操作，所以我们需要依赖手淘的签名。<br>手淘的签名因为涉及到安全问题，请谨慎操作！建议修改Tool\Config.ini文件，keystore节点下的keystore指向淘宝的debug.keystore文件。</p>
+<h6 id="2-2-3-开始反编译apk文件"><a href="#2-2-3-开始反编译apk文件" class="headerlink" title="2.2.3 开始反编译apk文件"></a>2.2.3 开始反编译apk文件</h6><p>反编译的过程因为涉及到dex-&gt;smali，整个进程比较慢。</p>
+<p>完成之后，将编译好的so文件替换导出目录 lib\armeabi-v7a</p>
+<h6 id="2-2-4-打包apk-签名"><a href="#2-2-4-打包apk-签名" class="headerlink" title="2.2.4 打包apk+签名"></a>2.2.4 打包apk+签名</h6><p>选择刚才导出的目录，点击回编译+签名</p>
+<p>整个过程比较缓慢，后续再打包时会检测smali文件是否有变更，操作就会快很多了</p>
+<h6 id="2-2-5-将apk推送到手机安装"><a href="#2-2-5-将apk推送到手机安装" class="headerlink" title="2.2.5 将apk推送到手机安装"></a>2.2.5 将apk推送到手机安装</h6><pre class=" language-shell"><code class="language-shell">adb install -r taobao-android-debug_mod_singed.apk</code></pre>
+<p>安装之后，调试方法参照2.1.2 + 2.1.3</p>
+<h4 id="3-附加进程时提示Exception-in-plugin-Android-NDK-Support的解决办法"><a href="#3-附加进程时提示Exception-in-plugin-Android-NDK-Support的解决办法" class="headerlink" title="3. 附加进程时提示Exception in plugin Android NDK Support的解决办法"></a>3. 附加进程时提示Exception in plugin Android NDK Support的解决办法</h4><p>因为Andoid NDK Support在开启远端lldb server时候，需要调用run-as {packagename} lldb-server，这样才有权限attach目标进程，这里会使用当前工程的包名，如果当前包名非com.taobao.taobao，会导致lldb server不能成功被创建或者无法attach到taobao的进程(调试java的模块就没有这个烦恼)。简单的方案是在工程中新建一个安卓的module，包名改为手淘包名。如果项目中存在demo工程，直接将app/build.gradle中的包名改为手淘的包名即可。</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/env python</span>
+<span class="token comment" spellcheck="true"># encoding: utf-8</span>
+<span class="token keyword">import</span> argparse
+<span class="token keyword">import</span> os
+<span class="token keyword">import</span> re
+<span class="token keyword">import</span> shutil
+<span class="token keyword">import</span> subprocess
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> zipfile
+<span class="token keyword">import</span> hashlib
+
+<span class="token triple-quoted-string string">""" Toos for developer
+Usage:
+  # push lib files on *ROOT* (support su) device
+  devtool pushlib libmessagesdkwrapper.so com.taobao.taobao
+"""</span>
+
+<span class="token comment" spellcheck="true"># 目前已知MEIZU自带的su命令使用c作为key。规范应该使用su -c ""</span>
+BRAND_UPPER_SU_COMMAND_C <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token string">"MEIZU"</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+
+CMD_ENCODING <span class="token operator">=</span> sys<span class="token punctuation">.</span>stdout<span class="token punctuation">.</span>encoding <span class="token keyword">if</span> sys<span class="token punctuation">.</span>stdout<span class="token punctuation">.</span>encoding <span class="token keyword">is</span> <span class="token operator">not</span> None <span class="token keyword">else</span> <span class="token string">"gbk"</span>
+
+<span class="token keyword">def</span> <span class="token function">choice</span><span class="token punctuation">(</span>prompt<span class="token punctuation">,</span> choices<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"y"</span><span class="token punctuation">,</span> <span class="token string">"n"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  user_input <span class="token operator">=</span> <span class="token string">""</span>
+  <span class="token keyword">while</span> user_input <span class="token operator">not</span> <span class="token keyword">in</span> choices<span class="token punctuation">:</span>
+    <span class="token keyword">if</span> isinstance<span class="token punctuation">(</span>prompt<span class="token punctuation">,</span> unicode<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      user_input <span class="token operator">=</span> raw_input<span class="token punctuation">(</span>prompt<span class="token punctuation">.</span>encode<span class="token punctuation">(</span>CMD_ENCODING<span class="token punctuation">,</span> <span class="token string">"ignore"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+      user_input <span class="token operator">=</span> raw_input<span class="token punctuation">(</span>prompt<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> user_input
+
+
+<span class="token keyword">def</span> <span class="token function">md5sum</span><span class="token punctuation">(</span>filepath<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">if</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>isfile<span class="token punctuation">(</span>filepath<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> open<span class="token punctuation">(</span>filepath<span class="token punctuation">,</span> <span class="token string">"rb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fp<span class="token punctuation">:</span>
+      contents <span class="token operator">=</span> fp<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> <span class="token punctuation">(</span>hashlib<span class="token punctuation">.</span>md5<span class="token punctuation">(</span>contents<span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> None
+
+
+<span class="token keyword">class</span> <span class="token class-name">AdbShell</span><span class="token punctuation">(</span>object<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> adb_path<span class="token punctuation">,</span> use_su <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>adb_path <span class="token operator">=</span> adb_path
+    self<span class="token punctuation">.</span>use_su <span class="token operator">=</span> use_su
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>use_su<span class="token punctuation">:</span>
+      self<span class="token punctuation">.</span>su_command <span class="token operator">=</span> self<span class="token punctuation">.</span>_get_su_command<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">def</span> <span class="token function">_get_su_command</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    brand <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span>self<span class="token punctuation">.</span>adb_path<span class="token punctuation">,</span> <span class="token string">"shell"</span><span class="token punctuation">,</span> <span class="token string">"getprop"</span><span class="token punctuation">,</span> <span class="token string">"ro.product.brand"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token string">"c"</span> <span class="token keyword">if</span> brand<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>upper<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">in</span> BRAND_UPPER_SU_COMMAND_C <span class="token keyword">else</span> <span class="token string">"-c"</span>
+
+  <span class="token keyword">def</span> <span class="token function">check_call</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token operator">not</span> isinstance<span class="token punctuation">(</span>args<span class="token punctuation">,</span> list<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">"unsupport args!"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>use_su<span class="token punctuation">:</span>
+      <span class="token keyword">return</span> subprocess<span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span>self<span class="token punctuation">.</span>adb_path<span class="token punctuation">,</span> <span class="token string">"shell"</span><span class="token punctuation">,</span> <span class="token string">"su"</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>su_command<span class="token punctuation">,</span>
+        <span class="token string">"%s"</span> <span class="token operator">%</span> <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">[</span>v<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">,</span> <span class="token string">"'"</span><span class="token punctuation">)</span> <span class="token keyword">for</span> v <span class="token keyword">in</span> args<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+      <span class="token keyword">return</span> subprocess<span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span>self<span class="token punctuation">.</span>adb_path<span class="token punctuation">,</span> <span class="token string">"shell"</span><span class="token punctuation">]</span> <span class="token operator">+</span> args<span class="token punctuation">)</span>
+
+  <span class="token keyword">def</span> <span class="token function">check_output</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token operator">not</span> isinstance<span class="token punctuation">(</span>args<span class="token punctuation">,</span> list<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">"unsupport args!"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>use_su<span class="token punctuation">:</span>
+      <span class="token keyword">return</span> subprocess<span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span>self<span class="token punctuation">.</span>adb_path<span class="token punctuation">,</span> <span class="token string">"shell"</span><span class="token punctuation">,</span> <span class="token string">"su"</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>su_command<span class="token punctuation">,</span>
+        <span class="token string">"%s"</span> <span class="token operator">%</span> <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">[</span>v<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">,</span> <span class="token string">"'"</span><span class="token punctuation">)</span> <span class="token keyword">for</span> v <span class="token keyword">in</span> args<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+      <span class="token keyword">return</span> subprocess<span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span>self<span class="token punctuation">.</span>adb_path<span class="token punctuation">,</span> <span class="token string">"shell"</span><span class="token punctuation">]</span> <span class="token operator">+</span> args<span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">_join_path</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> file<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>path<span class="token punctuation">,</span> file<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> path<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"\\"</span><span class="token punctuation">,</span> <span class="token string">"/"</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">_get_project_output</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">return</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>dirname<span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>abspath<span class="token punctuation">(</span>__file__<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">_find_package_pid</span><span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> package<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token triple-quoted-string string">"""Find the pid of the application process."""</span>
+  ps_output <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span>adb_path<span class="token punctuation">,</span> <span class="token string">'shell'</span><span class="token punctuation">,</span> <span class="token string">'ps'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  ps_match <span class="token operator">=</span> re<span class="token punctuation">.</span>search<span class="token punctuation">(</span>r<span class="token string">'^\S+\s+(\d+).*\s%s[^:]'</span> <span class="token operator">%</span> package<span class="token punctuation">,</span> ps_output<span class="token punctuation">,</span> re<span class="token punctuation">.</span>MULTILINE<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token operator">not</span> ps_match<span class="token punctuation">:</span>
+    <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'Unable to find pid for package %s on device'</span> <span class="token operator">%</span> package<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> int<span class="token punctuation">(</span>ps_match<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">_get_app_path</span><span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> package<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  package_pid <span class="token operator">=</span> _find_package_pid<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> package<span class="token punctuation">)</span>
+  proc_maps <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span>adb_path<span class="token punctuation">,</span> <span class="token string">'shell'</span><span class="token punctuation">,</span> <span class="token string">'run-as'</span><span class="token punctuation">,</span> package<span class="token punctuation">,</span> <span class="token string">'cat'</span><span class="token punctuation">,</span> <span class="token string">'/proc/%d/maps'</span> <span class="token operator">%</span> package_pid<span class="token punctuation">]</span><span class="token punctuation">)</span>
+  match <span class="token operator">=</span> re<span class="token punctuation">.</span>search<span class="token punctuation">(</span>r<span class="token string">'(/data/\S*?libc\+\+_shared\.so)'</span><span class="token punctuation">,</span> proc_maps<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> match <span class="token keyword">is</span> None<span class="token punctuation">:</span>
+    <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'Unable to app path on proc_maps(%d)'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>package_pid<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>dirname<span class="token punctuation">(</span>match<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">_get_app_abi</span><span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> package<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  abi_output <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span>adb_path<span class="token punctuation">,</span> <span class="token string">'shell'</span><span class="token punctuation">,</span> <span class="token string">'getprop'</span><span class="token punctuation">,</span> <span class="token string">'ro.product.cpu.abi'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> abi_output<span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">'arm'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    package_pid <span class="token operator">=</span> _find_package_pid<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> package<span class="token punctuation">)</span>
+    proc_maps <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span>adb_path<span class="token punctuation">,</span> <span class="token string">'shell'</span><span class="token punctuation">,</span> <span class="token string">'run-as'</span><span class="token punctuation">,</span> package<span class="token punctuation">,</span> <span class="token string">'cat'</span><span class="token punctuation">,</span> <span class="token string">'/proc/%d/maps'</span> <span class="token operator">%</span> package_pid<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> proc_maps<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">"/system/bin/app_process64"</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span>
+      <span class="token keyword">return</span> <span class="token string">"arm64-v8a"</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+      <span class="token keyword">return</span> <span class="token string">"armeabi-v7a"</span>
+  <span class="token keyword">return</span> abi_output
+
+
+<span class="token keyword">class</span> <span class="token class-name">PushLib</span><span class="token punctuation">(</span>object<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  DEVICE_TMP_PATH <span class="token operator">=</span> <span class="token string">'/data/local/tmp'</span>
+
+  <span class="token keyword">def</span> <span class="token function">add_subparser</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> subparser<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    parser <span class="token operator">=</span> subparser<span class="token punctuation">.</span>add_parser<span class="token punctuation">(</span><span class="token string">'pushlib'</span><span class="token punctuation">,</span> help<span class="token operator">=</span><span class="token string">"push lib to package lib directory"</span><span class="token punctuation">)</span>
+    parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">'lib'</span><span class="token punctuation">,</span> type<span class="token operator">=</span>str<span class="token punctuation">)</span>
+    parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">'package'</span><span class="token punctuation">,</span> type<span class="token operator">=</span>str<span class="token punctuation">)</span>
+    parser<span class="token punctuation">.</span>set_defaults<span class="token punctuation">(</span>func<span class="token operator">=</span>self<span class="token punctuation">.</span>run<span class="token punctuation">)</span>
+
+  <span class="token keyword">def</span> <span class="token function">_find_output_aar</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    file_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> root<span class="token punctuation">,</span> _<span class="token punctuation">,</span> files <span class="token keyword">in</span> os<span class="token punctuation">.</span>walk<span class="token punctuation">(</span><span class="token string">"."</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+      root <span class="token operator">=</span> root<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"\\"</span><span class="token punctuation">,</span> <span class="token string">"/"</span><span class="token punctuation">)</span>
+      <span class="token keyword">if</span> root<span class="token punctuation">.</span>endswith<span class="token punctuation">(</span><span class="token string">"build/outputs/aar"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> v <span class="token keyword">in</span> files<span class="token punctuation">:</span>
+          <span class="token keyword">if</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>splitext<span class="token punctuation">(</span>v<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">".aar"</span><span class="token punctuation">:</span>
+            file_list<span class="token punctuation">.</span>append<span class="token punctuation">(</span>_join_path<span class="token punctuation">(</span>root<span class="token punctuation">,</span> v<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> file_list
+
+  <span class="token keyword">def</span> <span class="token function">_find_lib</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> aar<span class="token punctuation">,</span> abi<span class="token punctuation">,</span> lib<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    zip_file <span class="token operator">=</span> zipfile<span class="token punctuation">.</span>ZipFile<span class="token punctuation">(</span>aar<span class="token punctuation">)</span>
+    info <span class="token operator">=</span> zip_file<span class="token punctuation">.</span>getinfo<span class="token punctuation">(</span><span class="token string">"jni/%s/%s"</span> <span class="token operator">%</span><span class="token punctuation">(</span>abi<span class="token punctuation">,</span> lib<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> info<span class="token punctuation">:</span>
+      extra_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>dirname<span class="token punctuation">(</span>aar<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">".unzip"</span><span class="token punctuation">)</span>
+      <span class="token keyword">if</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span>extra_path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        shutil<span class="token punctuation">.</span>rmtree<span class="token punctuation">(</span>extra_path<span class="token punctuation">)</span>
+      <span class="token keyword">return</span> zip_file<span class="token punctuation">.</span>extract<span class="token punctuation">(</span>info<span class="token punctuation">,</span> extra_path<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> None
+
+  <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> args<span class="token punctuation">.</span>adb <span class="token keyword">is</span> None<span class="token punctuation">:</span>
+      adb_path <span class="token operator">=</span> <span class="token string">'adb'</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+      adb_path <span class="token operator">=</span> args<span class="token punctuation">.</span>adb
+
+    <span class="token keyword">if</span> <span class="token operator">not</span> args<span class="token punctuation">.</span>use_su<span class="token punctuation">:</span>
+      subprocess<span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span>adb_path<span class="token punctuation">,</span> <span class="token string">"root"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+      _find_package_pid<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> args<span class="token punctuation">.</span>package<span class="token punctuation">)</span>
+    <span class="token keyword">except</span> <span class="token punctuation">(</span>Exception<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">print</span> <span class="token string">"Launch %s first"</span> <span class="token operator">%</span> args<span class="token punctuation">.</span>package
+      <span class="token keyword">return</span> <span class="token number">1</span>
+
+    aar_list <span class="token operator">=</span> self<span class="token punctuation">.</span>_find_output_aar<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    target <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">if</span> len<span class="token punctuation">(</span>aar_list<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+      <span class="token keyword">return</span> <span class="token number">1</span>
+    <span class="token keyword">elif</span> len<span class="token punctuation">(</span>aar_list<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+      target <span class="token operator">=</span> aar_list<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+      choice_prompt <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"- %d %s"</span> <span class="token operator">%</span> <span class="token punctuation">(</span>index<span class="token punctuation">,</span> v<span class="token punctuation">)</span> <span class="token keyword">for</span> index<span class="token punctuation">,</span> v <span class="token keyword">in</span> enumerate<span class="token punctuation">(</span>aar_list<span class="token punctuation">)</span><span class="token punctuation">]</span>
+      prompt <span class="token operator">=</span> <span class="token string">"\r\n"</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>choice_prompt<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'r\nselect index of the aar:'</span>
+      index <span class="token operator">=</span> choice<span class="token punctuation">(</span>prompt<span class="token punctuation">,</span> choices<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"%d"</span> <span class="token operator">%</span> v <span class="token keyword">for</span> v <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">(</span>aar_list<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+      target <span class="token operator">=</span> aar_list<span class="token punctuation">[</span>int<span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+    lib_local_path <span class="token operator">=</span> self<span class="token punctuation">.</span>_find_lib<span class="token punctuation">(</span>target<span class="token punctuation">,</span> _get_app_abi<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> args<span class="token punctuation">.</span>package<span class="token punctuation">)</span><span class="token punctuation">,</span> args<span class="token punctuation">.</span>lib<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token operator">not</span> lib_local_path<span class="token punctuation">:</span>
+      <span class="token keyword">return</span> <span class="token number">1</span>
+
+    lib_tmp_path <span class="token operator">=</span> _join_path<span class="token punctuation">(</span>PushLib<span class="token punctuation">.</span>DEVICE_TMP_PATH<span class="token punctuation">,</span> args<span class="token punctuation">.</span>lib<span class="token punctuation">)</span>
+    app_lib_path <span class="token operator">=</span> _join_path<span class="token punctuation">(</span>_get_app_path<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> args<span class="token punctuation">.</span>package<span class="token punctuation">)</span><span class="token punctuation">,</span> args<span class="token punctuation">.</span>lib<span class="token punctuation">)</span>
+
+    AdbShell<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> args<span class="token punctuation">.</span>use_su<span class="token punctuation">)</span><span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"rm"</span><span class="token punctuation">,</span> <span class="token string">"-f"</span><span class="token punctuation">,</span> lib_tmp_path<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span> <span class="token string">"1. push %s to device"</span> <span class="token operator">%</span> args<span class="token punctuation">.</span>lib
+    subprocess<span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span>adb_path<span class="token punctuation">,</span> <span class="token string">"push"</span><span class="token punctuation">,</span> lib_local_path<span class="token punctuation">,</span> lib_tmp_path<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span> <span class="token string">"2. killing %s"</span> <span class="token operator">%</span> args<span class="token punctuation">.</span>package
+    AdbShell<span class="token punctuation">(</span>adb_path<span class="token punctuation">)</span><span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"am"</span><span class="token punctuation">,</span> <span class="token string">"force-stop"</span><span class="token punctuation">,</span> args<span class="token punctuation">.</span>package<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span> <span class="token string">"3. copying to %s "</span> <span class="token operator">%</span> app_lib_path
+    AdbShell<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> args<span class="token punctuation">.</span>use_su<span class="token punctuation">)</span><span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"cp"</span><span class="token punctuation">,</span> lib_tmp_path<span class="token punctuation">,</span> app_lib_path<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    source_file_md5 <span class="token operator">=</span> md5sum<span class="token punctuation">(</span>lib_local_path<span class="token punctuation">)</span>
+    remote_file_md5 <span class="token operator">=</span> AdbShell<span class="token punctuation">(</span>adb_path<span class="token punctuation">,</span> args<span class="token punctuation">.</span>use_su<span class="token punctuation">)</span><span class="token punctuation">.</span>check_output<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"md5sum"</span><span class="token punctuation">,</span> app_lib_path<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span> <span class="token string">"SOURCE FILE MD5: %s\r\nREMOTE FILE MD5: %s"</span> <span class="token operator">%</span> <span class="token punctuation">(</span>source_file_md5<span class="token punctuation">,</span> remote_file_md5<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> source_file_md5 <span class="token operator">!=</span> remote_file_md5<span class="token punctuation">:</span>
+      <span class="token keyword">print</span> <span class="token string">"FAILED!"</span>
+      <span class="token keyword">return</span> <span class="token number">1</span>
+    <span class="token keyword">print</span> <span class="token string">"4. launch %s"</span> <span class="token operator">%</span> args<span class="token punctuation">.</span>package
+    AdbShell<span class="token punctuation">(</span>adb_path<span class="token punctuation">)</span><span class="token punctuation">.</span>check_call<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"monkey"</span><span class="token punctuation">,</span> <span class="token string">"-p"</span><span class="token punctuation">,</span> args<span class="token punctuation">.</span>package<span class="token punctuation">,</span> <span class="token string">"-c"</span><span class="token punctuation">,</span>
+      <span class="token string">"android.intent.category.LAUNCHER"</span><span class="token punctuation">,</span> <span class="token string">"1"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span> <span class="token string">"5. DONE!"</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span>
+
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  parser <span class="token operator">=</span> argparse<span class="token punctuation">.</span>ArgumentParser<span class="token punctuation">(</span><span class="token string">"Taobao develop tool"</span><span class="token punctuation">)</span>
+  subparsers <span class="token operator">=</span> parser<span class="token punctuation">.</span>add_subparsers<span class="token punctuation">(</span>help<span class="token operator">=</span><span class="token string">'sub-command help'</span><span class="token punctuation">)</span>
+  parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">'--adb'</span><span class="token punctuation">,</span> type<span class="token operator">=</span>str<span class="token punctuation">,</span> help<span class="token operator">=</span><span class="token string">"path to ADB tool"</span><span class="token punctuation">)</span>
+  parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">'--use_su'</span><span class="token punctuation">,</span> dest<span class="token operator">=</span><span class="token string">'use_su'</span><span class="token punctuation">,</span> action<span class="token operator">=</span><span class="token string">'store_true'</span><span class="token punctuation">)</span>
+  parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">'--no_use_su'</span><span class="token punctuation">,</span> dest<span class="token operator">=</span><span class="token string">'use_su'</span><span class="token punctuation">,</span> action<span class="token operator">=</span><span class="token string">'store_false'</span><span class="token punctuation">)</span>
+  parser<span class="token punctuation">.</span>set_defaults<span class="token punctuation">(</span>use_su<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+  commands <span class="token operator">=</span> <span class="token punctuation">[</span>
+    PushLib<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span>
+  <span class="token keyword">for</span> command <span class="token keyword">in</span> commands<span class="token punctuation">:</span>
+    command<span class="token punctuation">.</span>add_subparser<span class="token punctuation">(</span>subparsers<span class="token punctuation">)</span>
+
+  args <span class="token operator">=</span> parser<span class="token punctuation">.</span>parse_args<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> args<span class="token punctuation">.</span>func<span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+  sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span>main<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2019/09/23/debug-native-code-on-Android/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="Android Studio中调试native代码">
+                        
+                        <span class="card-title">Android Studio中调试native代码</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1. 背景1.1 技术背景随着减少多端开发成本，规避多端差异，业务采用跨端的C++开发，本文主要介绍在Android调试native代码的技巧，抛砖引玉。
+2. 调试机型2.1 有root权限的手机2.1.1 命令行中敲如上命令，将本地编译
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-23
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            jonny
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Debug/">
+                        <span class="chip bg-color">Debug</span>
+                    </a>
+                    
+                    <a href="/tags/Android/">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="/tags/Native/">
+                        <span class="chip bg-color">Native</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/09/23/Hello-github-io/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Hello github.io">
+                        
+                        <span class="card-title">Hello github.io</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            初识hexo按照网上的教程一番折腾，又开始博客之旅了。
+
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            i
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-09-23
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            孑鸢
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/hexo/">
+                        <span class="chip bg-color">hexo</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://www.ikoumi.com" target="_blank">jonny</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    
+    
+
+    
+
+    
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i["DaoVoiceObject"] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            a.charset = "utf-8";
+            m.parentNode.insertBefore(a, m)
+        })(window, document, "script", ('https:' == document.location.protocol ? 'https:' : 'http:') +
+            "//widget.daovoice.io/widget/6984b559.js", "daovoice")
+        daovoice('init', {
+            app_id: ""
+        });
+        daovoice('update');
+    </script>
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+
+</body>
+
+</html>
