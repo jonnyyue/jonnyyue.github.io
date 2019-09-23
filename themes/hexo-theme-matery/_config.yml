@@ -209,13 +209,13 @@ mySkills:
       percent: 90%
     Python:
       background: 'linear-gradient(to right, #9900FF 0%, #CC66FF 100%)'
-      percent: 60%
+      percent: 75%
     Java:
       background: 'linear-gradient(to right, #2196F3 0%, #42A5F5 100%)'
       percent: 60%
-    Object-C:
+    Dart:
       background: 'linear-gradient(to right, #00BCD4 0%, #80DEEA 100%)'
-      percent: 50%
+      percent: 40%
 
 # config gallery of my photos in about page.
 # If you don't want to display this `Gallery` content, you can deactivate or delete this configuration.
@@ -395,7 +395,7 @@ featureImages:
 # noreprint（不允许转载 not allowed to reprint）
 # pay（付费转载 pay for reprinting）
 reprint:
-  enable: true # whether enable reprint section 是否启用“转载规则限定模块”
+  enable: false # whether enable reprint section 是否启用“转载规则限定模块”
   default: cc_by
   
 # DaoVoice online contact 
@@ -432,7 +432,7 @@ ribbon_dynamic:
 # sharejs文章分享模块.
 # 支持顺序，可选项目为twitter, facebook, google, qq, qzone, wechat, weibo, douban, linkedin.
 sharejs:
-  enable: true
+  enable: false
   sites: twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin
 
 # addthis文章分享模块.
