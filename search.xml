@@ -5,8 +5,8 @@
     
     <entry>
       <title>hello hexo</title>
-      <link href="/2019/09/23/hello-hexo/"/>
-      <url>/2019/09/23/hello-hexo/</url>
+      <link href="/hello-hexo/"/>
+      <url>/hello-hexo/</url>
       
         <content type="html"><![CDATA[<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>经过一番折腾，博客又上线了。保持更新博客的好习惯</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
       
