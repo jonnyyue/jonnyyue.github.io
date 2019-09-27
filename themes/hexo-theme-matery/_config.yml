@@ -54,11 +54,11 @@ dream:
 # Whether to display the musics.
 # 是否在首页显示音乐.
 music:
-  enable: false
+  enable: true
   showTitle: true
   title: 听听音乐
-  fixed: false # 开启吸底模式
-  autoplay: false # 是否自动播放
+  fixed: true # 开启吸底模式
+  autoplay: true # 是否自动播放
   theme: '#42b983'
   loop: 'all' # 音频循环播放, 可选值: 'all', 'one', 'none'
   order: 'list' # 音频循环顺序, 可选值: 'list', 'random'
@@ -234,13 +234,13 @@ postCalendar: true
 # the Gitalk config，default disabled
 # Gitalk 评论模块的配置，默认为不激活
 gitalk:
-  enable: false
-  owner:
-  repo:
+  enable: true
+  owner: jonnyyue
+  repo: jonnyyue.github.io
   oauth:
-    clientId:
-    clientSecret:
-  admin:
+    clientId: 4003a057228762d76418
+    clientSecret: 57b9f96c5fd3219b5fa6f4bcb4b2461b2a39e4c8
+  admin: jonnyyue
 
 # the Gitment config，default disabled
 # Gitment 评论模块的配置，默认为不激活
@@ -255,7 +255,7 @@ gitment:
 # disqus config, default disabled
 # Disqus评论模块的配置，默认为不激活
 disqus:
-  enable: true
+  enable: false
   shortname: www-ikoumi-com
 
 # Livere comment configuration, the default is not activated
