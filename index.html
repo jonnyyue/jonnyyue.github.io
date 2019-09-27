@@ -416,6 +416,37 @@ $(function () {
                     
 
                     
+                        
+
+<link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="music-player">
+    
+    <div class="row">
+        <div class="col l8 offset-l2 m10 offset-m1 s12">
+            <div id="aplayer" class="music"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script>
+$(function () {
+    new APlayer({
+        container: document.getElementById('aplayer'),
+        fixed: 'true' === 'true',
+        autoplay: 'true' === 'true',
+        theme: '#42b983',
+        loop: 'all',
+        order: 'list',
+        preload: 'auto',
+        volume: Number('0.7'),
+        listFolded: 'false' === 'true',
+        listMaxHeight: '',
+        audio: JSON.parse('[{"name":"千千阙歌","artist":"BG","url":"https://xianroubao.oss-cn-beijing.aliyuncs.com/assets/audio/%E5%8D%83%E5%8D%83%E9%98%99%E6%AD%8C.m4a","cover":"https://y.gtimg.cn/music/photo_new/T002R500x500M000003pUBFL10QPM0.jpg?max_age=2592000"}]')
+    });
+});
+</script>
+                    
 
                     
 
