@@ -405,11 +405,11 @@
 <h4 id="1-HLS协议"><a href="#1-HLS协议" class="headerlink" title="1. HLS协议"></a>1. HLS协议</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;在浏览器中，HLS协议的video标签是没有保存功能的(<a href="https://cs.chromium.org/chromium/src/third_party/blink/renderer/core/html/media/html_media_element.cc?rcl=a0829135f51b120470ab845efc586058d1d96d57&amp;l=1996" target="_blank" rel="noopener">源码地址</a>)。所以不能直接在浏览器中下载媒体文件，但是仅仅这一点是不够的，用户可以方便的拿到云存储上的视频地址，下载到本地即可以播放。所以HLS又提供了一套视频流加密的方案，这样云存储中存放的视频流也是加密的，由浏览器负责一边进行解密一边播放。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;M3U8作为HLS协议的载体，也是我们后续分析的主要对象。详细的M3U8文件格式的介绍网上有很多，可以参照文档<a href="https://www.jianshu.com/p/e97f6555a070" target="_blank" rel="noopener">m3u8文件格式详解</a></p>
 <p>下面列出一段未加密的样例<a href="https://node.imgio.in/demo/birds.m3u8" target="_blank" rel="noopener">传送门</a></p>
-<p><img src="/ffmpeg-m3u8-download/1.png" alt="没有加密的M3U8视频流"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/1.png" alt="没有加密的M3U8视频流"></p>
 <p>可以使用ffmpeg工具将视频保存到本地</p>
 <pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "https://node.imgio.in/demo/birds.m3u8" -c  copy  -copyts "birds.ts"</code></pre>
 <p>含有加密KEY的样例<a href="https://cdn.theoplayer.com/video/big_buck_bunny_encrypted/stream-800/index.m3u8" target="_blank" rel="noopener">传送门</a></p>
-<p><img src="/ffmpeg-m3u8-download/2.png" alt="加密的M3U8视频流"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/2.png" alt="加密的M3U8视频流"></p>
 <p>因为样例中的解密KEY没有做鉴权，我们同样可以将视频保存到本地</p>
 <pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "https://cdn.theoplayer.com/video/big_buck_bunny_encrypted/stream-800/index.m3u8" -c  copy  -copyts "index.ts"</code></pre>
 <h4 id="2-加密策略"><a href="#2-加密策略" class="headerlink" title="2. 加密策略"></a>2. 加密策略</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;浏览器在解析M3U8协议文件时候，如果发现文件中指定了加密策略，就使用当前的网络环境访问该地址，获取对应的解密KEY。从云存储中读取到ts流之后，使用KEY和IV进行解密，然后在网页上播放。由于视频流一般是部署在OSS或者CDN，方便让用户下载，通常这类服务器是不会做鉴权策略的，于是对视频的保护就转变成了对解密KEY的保护。</p>
@@ -420,18 +420,18 @@
 <h4 id="3-实战下载百度的加密视频"><a href="#3-实战下载百度的加密视频" class="headerlink" title="3. 实战下载百度的加密视频"></a>3. 实战下载百度的加密视频</h4><blockquote>
 <p>这里使用Chrome浏览器进行演示，页面地址同目录2.3</p>
 </blockquote>
-<h5 id="3-1-抓取关键信息"><a href="#3-1-抓取关键信息" class="headerlink" title="3.1 抓取关键信息"></a>3.1 抓取关键信息</h5><p><img src="/ffmpeg-m3u8-download/3.png" alt="打开开发者工具，定位到Network的tab页"></p>
-<p><img src="/ffmpeg-m3u8-download/4.png" alt="点击播放token加密视频"></p>
-<p><img src="/ffmpeg-m3u8-download/5.png" alt="触发了对m3u8文件的拉取"></p>
-<p><img src="/ffmpeg-m3u8-download/6.png" alt="拉取视频流的解密KEY"></p>
-<p><img src="/ffmpeg-m3u8-download/7.png" alt="通过关键字找到js文件中的KeyLoader"></p>
-<h5 id="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"><a href="#可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中" class="headerlink" title="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"></a>可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中</h5><p><img src="/ffmpeg-m3u8-download/8.png" alt="下断点，重新加载视频，即可看到解密KEY"></p>
-<h5 id="3-1-构造可以方便下载视频的M3U8"><a href="#3-1-构造可以方便下载视频的M3U8" class="headerlink" title="3.1 构造可以方便下载视频的M3U8"></a>3.1 构造可以方便下载视频的M3U8</h5><p>如何让ffmpeg工具方便的拿到这个key？我们搭建一个服务端接口：接收一个base64编码后的参数，解码成二进制流返回给客户端。(可能比较搓的方案，但是好在还很通用)</p>
-<h5 id="构造解密KEY的URI："><a href="#构造解密KEY的URI：" class="headerlink" title="构造解密KEY的URI："></a>构造解密KEY的URI：</h5><p><img src="/ffmpeg-m3u8-download/9.png" alt="将复制下来的解密KEY做base64编码"></p>
-<p><img src="/ffmpeg-m3u8-download/10.png" alt="替换M3U8文件中的URI部分"></p>
-<pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "baidu.m3u8" -c  copy  -copyts "baidu.ts"</code></pre>
-<p><img src="/ffmpeg-m3u8-download/11.png" alt="测试可以播放"></p>
-<h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;HLS很大的促进了网校行业的崛起，端APP也可以安全的将视频缓存到本地，节省用户流量。<br>&nbsp;&nbsp;&nbsp;&nbsp;整个思路就在于构造出M3U8文件，然后得到对应的解密KEY，将KEY写到M3U8中，然后使用ffmpeg工具进行下载。</p>
+<h5 id="3-1-抓取关键信息"><a href="#3-1-抓取关键信息" class="headerlink" title="3.1 抓取关键信息"></a>3.1 抓取关键信息</h5><p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/3.png" alt="打开开发者工具，定位到Network的tab页"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/4.png" alt="点击播放token加密视频"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/5.png" alt="触发了对m3u8文件的拉取"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/6.png" alt="拉取视频流的解密KEY"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/7.png" alt="通过关键字找到js文件中的KeyLoader"></p>
+<h5 id="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"><a href="#可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中" class="headerlink" title="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"></a>可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中</h5><p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/8.png" alt="下断点，重新加载视频，即可看到解密KEY"></p>
+<h5 id="3-2-构造可以方便下载视频的M3U8"><a href="#3-2-构造可以方便下载视频的M3U8" class="headerlink" title="3.2 构造可以方便下载视频的M3U8"></a>3.2 构造可以方便下载视频的M3U8</h5><p>如何让ffmpeg工具方便的拿到这个key？我们搭建一个服务端接口：接收一个base64编码后的参数，解码成二进制流返回给客户端。(可能比较搓的方案，但是好在还很通用)</p>
+<h5 id="构造解密KEY的URI："><a href="#构造解密KEY的URI：" class="headerlink" title="构造解密KEY的URI："></a>构造解密KEY的URI：</h5><p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/9.png" alt="将复制下来的解密KEY做base64编码"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/10.png" alt="替换M3U8文件中的URI部分"></p>
+<h5 id="3-3-使用ffmpeg工具下载媒体文件"><a href="#3-3-使用ffmpeg工具下载媒体文件" class="headerlink" title="3.3 使用ffmpeg工具下载媒体文件"></a>3.3 使用ffmpeg工具下载媒体文件</h5><pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "baidu.m3u8" -c  copy  -copyts "baidu.ts"</code></pre>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/11.png" alt="测试可以播放"></p>
+<h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;在线教育成为了互联网的风口，HLS协议也很好的契合了这个行业。最后呼吁大家多多尊重版权，从正规渠道购买视频资源。创作不易。</p>
 <p>仅技术交流，请勿使用于非法用途。</p>
 <script>
         document.querySelectorAll('.github-emoji')
