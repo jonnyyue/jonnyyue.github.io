@@ -4,12 +4,9 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="hello hexo, 孑鸢">
-    <meta name="description" content="简介经过一番折腾，博客又上线了。保持更新博客的好习惯
-
-        document.querySelectorAll(&#39;.github-emoji&#39;)
-          .forEach(el =&gt; {
-            if">
+    <meta name="keywords" content="[音视频]下载m3u8格式的视频文件, 孑鸢">
+    <meta name="description" content="0. 网页中播放视频的演进&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。
+1. HLS">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>hello hexo | 孑鸢</title>
+    <title>[音视频]下载m3u8格式的视频文件 | 孑鸢</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -247,13 +244,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        hello hexo
+                        [音视频]下载m3u8格式的视频文件
                     </div>
                 </div>
             </div>
@@ -365,8 +362,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/hexo/">
-                                <span class="chip bg-color">hexo</span>
+                            <a href="/tags/ffmpeg/">
+                                <span class="chip bg-color">ffmpeg</span>
+                            </a>
+                        
+                            <a href="/tags/m3u8/">
+                                <span class="chip bg-color">m3u8</span>
                             </a>
                         
                     </div>
@@ -374,13 +375,22 @@
                 </div>
                 <div class="col s5 right-align">
                     
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/周边/" class="post-category">
+                                周边
+                            </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
 
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-09-23
+                    2019-11-12
                 </div>
 
                 
@@ -391,7 +401,38 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>经过一番折腾，博客又上线了。保持更新博客的好习惯</p>
+                <h4 id="0-网页中播放视频的演进"><a href="#0-网页中播放视频的演进" class="headerlink" title="0. 网页中播放视频的演进"></a>0. 网页中播放视频的演进</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。</p>
+<h4 id="1-HLS协议"><a href="#1-HLS协议" class="headerlink" title="1. HLS协议"></a>1. HLS协议</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;在浏览器中，HLS协议的video标签是没有保存功能的(<a href="https://cs.chromium.org/chromium/src/third_party/blink/renderer/core/html/media/html_media_element.cc?rcl=a0829135f51b120470ab845efc586058d1d96d57&amp;l=1996" target="_blank" rel="noopener">源码地址</a>)。所以不能直接在浏览器中下载媒体文件，但是仅仅这一点是不够的，用户可以方便的拿到云存储上的视频地址，下载到本地即可以播放。所以HLS又提供了一套视频流加密的方案，这样云存储中存放的视频流也是加密的，由浏览器负责一边进行解密一边播放。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;M3U8作为HLS协议的载体，也是我们后续分析的主要对象。详细的M3U8文件格式的介绍网上有很多，可以参照文档<a href="https://www.jianshu.com/p/e97f6555a070" target="_blank" rel="noopener">m3u8文件格式详解</a></p>
+<p>下面列出一段未加密的样例<a href="https://node.imgio.in/demo/birds.m3u8" target="_blank" rel="noopener">传送门</a></p>
+<p><img src="/ffmpeg-m3u8-download/1.png" alt="没有加密的M3U8视频流"></p>
+<p>可以使用ffmpeg工具将视频保存到本地</p>
+<pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "https://node.imgio.in/demo/birds.m3u8" -c  copy  -copyts "birds.ts"</code></pre>
+<p>含有加密KEY的样例<a href="https://cdn.theoplayer.com/video/big_buck_bunny_encrypted/stream-800/index.m3u8" target="_blank" rel="noopener">传送门</a></p>
+<p><img src="/ffmpeg-m3u8-download/2.png" alt="加密的M3U8视频流"></p>
+<p>因为样例中的解密KEY没有做鉴权，我们同样可以将视频保存到本地</p>
+<pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "https://cdn.theoplayer.com/video/big_buck_bunny_encrypted/stream-800/index.m3u8" -c  copy  -copyts "index.ts"</code></pre>
+<h4 id="2-加密策略"><a href="#2-加密策略" class="headerlink" title="2. 加密策略"></a>2. 加密策略</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;浏览器在解析M3U8协议文件时候，如果发现文件中指定了加密策略，就使用当前的网络环境访问该地址，获取对应的解密KEY。从云存储中读取到ts流之后，使用KEY和IV进行解密，然后在网页上播放。由于视频流一般是部署在OSS或者CDN，方便让用户下载，通常这类服务器是不会做鉴权策略的，于是对视频的保护就转变成了对解密KEY的保护。</p>
+<h5 id="2-1-refer检测"><a href="#2-1-refer检测" class="headerlink" title="2.1 refer检测"></a>2.1 refer检测</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;这是比较粗糙的方案，如果请求来源不是来自可信的域名，就直接返回错误。我们直接用ffmpeg工具操作M3U8时，访问解密KEY的URI是没有refer的，所以不能直接下载。</p>
+<h5 id="2-2-用户鉴权"><a href="#2-2-用户鉴权" class="headerlink" title="2.2 用户鉴权"></a>2.2 用户鉴权</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;很多网校通常会用这种方案进行加密，这种方式可以根据权限管理来决策哪些用户可以获取到解密KEY。推荐一种比较方便的方案，通过fiddler进行抓包，然后用python脚本解析对应的saz，将m3u8中的URI换成对应的KEY，然后使用ffmpeg将媒体文件保存到本地。</p>
+<h5 id="2-3-自定义KeyLoader"><a href="#2-3-自定义KeyLoader" class="headerlink" title="2.3 自定义KeyLoader"></a>2.3 自定义KeyLoader</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;可以使用这个<a href="https://github.com/video-dev/hls.js" target="_blank" rel="noopener">组件</a>，支持自定义KeyLoader，通过URI从服务端请求回来一串字符串，经过定制的KeyLoader来解密之后，得到真正的解密KEY。这种需要我们的分析KeyLoader源码，百度云提供的加密视频方案就用了这个策略<a href="http://cyberplayer.bcelive.com/demo/new/index.html" target="_blank" rel="noopener">练手地址</a>，对key的解密用到了AES-ecb，对解密KEY进行解密的密钥写死在js代码中。</p>
+<h5 id="2-4-自定义PlaylistLoader"><a href="#2-4-自定义PlaylistLoader" class="headerlink" title="2.4 自定义PlaylistLoader"></a>2.4 自定义PlaylistLoader</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;除了可以自定义KeyLoader，这个组件也支持指定PlaylistLoader，这样M3U8文件也是动态解密出来的，增强了安全性<a href="https://coding.imooc.com/class/321.html" target="_blank" rel="noopener">练手地址</a>。通过动态调试的方式可以拿到明文的M3U8和对应的解密KEY。由于网站的解密算法比较复杂，笔者没有尝试提取算法，感兴趣的大神可以分析下。</p>
+<h4 id="3-实战下载百度的加密视频"><a href="#3-实战下载百度的加密视频" class="headerlink" title="3. 实战下载百度的加密视频"></a>3. 实战下载百度的加密视频</h4><blockquote>
+<p>这里使用Chrome浏览器进行演示，页面地址同目录2.3</p>
+</blockquote>
+<h5 id="3-1-抓取关键信息"><a href="#3-1-抓取关键信息" class="headerlink" title="3.1 抓取关键信息"></a>3.1 抓取关键信息</h5><p><img src="/ffmpeg-m3u8-download/3.png" alt="打开开发者工具，定位到Network的tab页"></p>
+<p><img src="/ffmpeg-m3u8-download/4.png" alt="点击播放token加密视频"></p>
+<p><img src="/ffmpeg-m3u8-download/5.png" alt="触发了对m3u8文件的拉取"></p>
+<p><img src="/ffmpeg-m3u8-download/6.png" alt="拉取视频流的解密KEY"></p>
+<p><img src="/ffmpeg-m3u8-download/7.png" alt="通过关键字找到js文件中的KeyLoader"></p>
+<h5 id="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"><a href="#可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中" class="headerlink" title="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"></a>可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中</h5><p><img src="/ffmpeg-m3u8-download/8.png" alt="下断点，重新加载视频，即可看到解密KEY"></p>
+<h5 id="3-1-构造可以方便下载视频的M3U8"><a href="#3-1-构造可以方便下载视频的M3U8" class="headerlink" title="3.1 构造可以方便下载视频的M3U8"></a>3.1 构造可以方便下载视频的M3U8</h5><p>如何让ffmpeg工具方便的拿到这个key？我们搭建一个服务端接口：接收一个base64编码后的参数，解码成二进制流返回给客户端。(可能比较搓的方案，但是好在还很通用)</p>
+<h5 id="构造解密KEY的URI："><a href="#构造解密KEY的URI：" class="headerlink" title="构造解密KEY的URI："></a>构造解密KEY的URI：</h5><p><img src="/ffmpeg-m3u8-download/9.png" alt="将复制下来的解密KEY做base64编码"></p>
+<p><img src="/ffmpeg-m3u8-download/10.png" alt="替换M3U8文件中的URI部分"></p>
+<pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "baidu.m3u8" -c  copy  -copyts "baidu.ts"</code></pre>
+<p><img src="/ffmpeg-m3u8-download/11.png" alt="测试可以播放"></p>
+<h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;HLS很大的促进了网校行业的崛起，端APP也可以安全的将视频缓存到本地，节省用户流量。<br>&nbsp;&nbsp;&nbsp;&nbsp;整个思路就在于构造出M3U8文件，然后得到对应的解密KEY，将KEY写到M3U8中，然后使用ffmpeg工具进行下载。</p>
+<p>仅技术交流，请勿使用于非法用途。</p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -573,7 +614,7 @@
         repo: 'jonnyyue.github.io',
         owner: 'jonnyyue',
         admin: "jonnyyue",
-        id: '2019-09-23T21-41-09',
+        id: '2019-11-12T11-37-27',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -595,9 +636,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fas fa-chevron-left"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/ffmpeg-m3u8-download/">
                     <div class="card-image">
@@ -616,9 +658,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-11-12
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-11-12
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -631,6 +673,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -650,7 +693,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fas fa-chevron-right"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/hello-hexo/">
@@ -684,7 +727,6 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
