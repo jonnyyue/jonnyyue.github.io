@@ -1,5 +1,5 @@
 ---
-title: "[音视频]下载m3u8格式的视频文件"
+title: "[音视频]下载M3U8加密视频文件"
 top: false
 cover: false
 toc: true
