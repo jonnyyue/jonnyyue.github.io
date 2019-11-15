@@ -426,11 +426,11 @@
 <p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/6.png" alt="拉取视频流的解密KEY"></p>
 <p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/7.png" alt="通过关键字找到js文件中的KeyLoader"></p>
 <h5 id="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"><a href="#可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中" class="headerlink" title="可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中"></a>可以看到这里用到了AES-ecb解密，并且密钥也暴露在js文件中</h5><p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/8.png" alt="下断点，重新加载视频，即可看到解密KEY"></p>
-<h5 id="3-2-构造可以方便下载视频的M3U8"><a href="#3-2-构造可以方便下载视频的M3U8" class="headerlink" title="3.2 构造可以方便下载视频的M3U8"></a>3.2 构造可以方便下载视频的M3U8</h5><p>如何让ffmpeg工具方便的拿到这个key？我们搭建一个服务端接口：接收一个base64编码后的参数，解码成二进制流返回给客户端。(可能比较搓的方案，但是好在还很通用)</p>
+<h5 id="3-2-构造可以方便下载视频的M3U8"><a href="#3-2-构造可以方便下载视频的M3U8" class="headerlink" title="3.2 构造可以方便下载视频的M3U8"></a>3.2 构造可以方便下载视频的M3U8</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;如何让ffmpeg工具方便的拿到这个key？我们搭建一个服务端接口：接收一个base64编码后的参数，解码成二进制流返回给客户端。(可能比较搓的方案，但是好在还很通用)</p>
 <h5 id="构造解密KEY的URI："><a href="#构造解密KEY的URI：" class="headerlink" title="构造解密KEY的URI："></a>构造解密KEY的URI：</h5><p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/9.png" alt="将复制下来的解密KEY做base64编码"></p>
 <p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/10.png" alt="替换M3U8文件中的URI部分"></p>
 <h5 id="3-3-使用ffmpeg工具下载媒体文件"><a href="#3-3-使用ffmpeg工具下载媒体文件" class="headerlink" title="3.3 使用ffmpeg工具下载媒体文件"></a>3.3 使用ffmpeg工具下载媒体文件</h5><pre class=" language-shell"><code class="language-shell">ffmpeg -protocol_whitelist crypto,file,tcp,http,https,tls -i "baidu.m3u8" -c  copy  -copyts "baidu.ts"</code></pre>
-<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/11.png" alt="测试可以播放"></p>
+<p><img src="//www.ikoumi.com/ffmpeg-m3u8-download/11.png" alt="下载后的视频可以正常播放"></p>
 <h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;在线教育成为了互联网的风口，HLS协议也很好的契合了这个行业。最后呼吁大家多多尊重版权，从正规渠道购买视频资源。创作不易。</p>
 <p>仅技术交流，请勿使用于非法用途。</p>
 <script>
