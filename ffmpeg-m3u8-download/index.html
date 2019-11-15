@@ -5,7 +5,7 @@
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
     <meta name="keywords" content="[音视频]下载m3u8格式的视频文件, 孑鸢">
-    <meta name="description" content="0. 网页中播放视频的演进&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。
+    <meta name="description" content="0. 网页视频播放器的演进&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。
 1. HLS">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -401,7 +401,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="0-网页中播放视频的演进"><a href="#0-网页中播放视频的演进" class="headerlink" title="0. 网页中播放视频的演进"></a>0. 网页中播放视频的演进</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。</p>
+                <h4 id="0-网页视频播放器的演进"><a href="#0-网页视频播放器的演进" class="headerlink" title="0. 网页视频播放器的演进"></a>0. 网页视频播放器的演进</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。</p>
 <h4 id="1-HLS协议"><a href="#1-HLS协议" class="headerlink" title="1. HLS协议"></a>1. HLS协议</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;在浏览器中，HLS协议的video标签是没有保存功能的(<a href="https://cs.chromium.org/chromium/src/third_party/blink/renderer/core/html/media/html_media_element.cc?rcl=a0829135f51b120470ab845efc586058d1d96d57&amp;l=1996" target="_blank" rel="noopener">源码地址</a>)。所以不能直接在浏览器中下载媒体文件，但是仅仅这一点是不够的，用户可以方便的拿到云存储上的视频地址，下载到本地即可以播放。所以HLS又提供了一套视频流加密的方案，这样云存储中存放的视频流也是加密的，由浏览器负责一边进行解密一边播放。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;M3U8作为HLS协议的载体，也是我们后续分析的主要对象。详细的M3U8文件格式的介绍网上有很多，可以参照文档<a href="https://www.jianshu.com/p/e97f6555a070" target="_blank" rel="noopener">m3u8文件格式详解</a></p>
 <p>下面列出一段未加密的样例<a href="https://node.imgio.in/demo/birds.m3u8" target="_blank" rel="noopener">传送门</a></p>
@@ -653,7 +653,7 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            0. 网页中播放视频的演进&nbsp;&nbsp;&nbsp;&nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。
+                            0. 网页视频播放器的演进&nbsp;&nbsp;&nbsp;&nbsp;随着浏览器的逐步迭代，网页播放视频方案也一直不断演进。从早期的MediaPlayer到Flash，再到video标签，我们可以更方便的在网页中播放视频。
 1. HLS
                         
                     </div>
